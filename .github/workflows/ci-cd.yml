@@ -3,16 +3,18 @@ name: Build, Push, and Deploy Netflix Clone
 on:
   push:
     branches:
-      - master
       - release
-  pull_request:
-    branches:
       - master
-      - release
+
+permissions:
+  contents: read
 
 jobs:
   build-push-deploy:
     runs-on: ubuntu-latest
+
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
 
     steps:
       # 1️⃣ Checkout
