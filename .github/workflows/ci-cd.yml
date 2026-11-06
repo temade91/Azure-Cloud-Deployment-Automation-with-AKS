@@ -72,17 +72,22 @@ jobs:
             --name MyAKSCluster \
             --overwrite-existing
 
-      # 🔟 Select Namespace (master=prod, release/dev=dev)
-      - name: Select Namespace
+            - name: Select Namespace
+        shell: bash
         run: |
-          BRANCH="${GITHUB_REF##*/}"
-          if [[ "$BRANCH" == "master" ]]; then
-            echo "namespace=prod" >> $GITHUB_ENV
-          else
-            echo "namespace=dev" >> $GITHUB_ENV
-          fi
-          echo "Using namespace: ${{ env.namespace }}"
+          BRANCH="${GITHUB_REF_NAME}"
 
+          if [[ "$BRANCH" == "master" ]]; then
+            NAMESPACE="prod"
+          elif [[ "$BRANCH" == "release" ]]; then
+            NAMESPACE="dev"
+          else
+            echo "Unsupported branch: $BRANCH"
+            exit 1
+          fi
+
+          echo "namespace=$NAMESPACE" >> "$GITHUB_ENV"
+          echo "Using namespace: $NAMESPACE"
       # 1️⃣1️⃣ Ensure namespace exists
       - name: Ensure Namespace Exists
         run: |
