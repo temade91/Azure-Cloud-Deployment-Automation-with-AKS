@@ -1,4 +1,4 @@
-# Netflix Clone – Azure Kubernetes Service Deployment
+# Azure Cloud Deployment Automation with AKS
 
 ## Project Overview
 
@@ -6,7 +6,7 @@ This project demonstrates the containerisation and deployment of a Netflix Clone
 
 The application is served using Nginx and packaged into a Docker image. GitHub Actions automates the image build and publication to Docker Hub, followed by deployment to AKS.
 
-The deployment workflow was designed to support two environments:
+The deployment workflow supports two environments:
 
 - **Development:** `release` branch → `dev` namespace
 - **Production:** `master` branch → `prod` namespace
@@ -28,15 +28,15 @@ The deployment workflow was designed to support two environments:
 
 The GitHub Actions workflow automates the following process:
 
-1. A push or pull request targeting `master` or `release` triggers the workflow.
+1. A push to the `master` or `release` branch triggers the workflow.
 2. GitHub Actions checks out the repository.
 3. Docker Buildx builds the application image.
 4. The image is pushed to Docker Hub using `latest` and commit-SHA tags.
 5. The Kubernetes deployment manifest is updated with the commit-specific image.
-6. The workflow authenticates with Azure using GitHub Secrets.
-7. AKS credentials are retrieved using Azure CLI.
-8. The deployment namespace is selected based on the branch.
-9. Kubernetes applies the deployment and service manifests.
+6. The workflow selects the deployment namespace based on the branch.
+7. GitHub Actions authenticates with Azure using GitHub Secrets.
+8. AKS credentials are retrieved using Azure CLI.
+9. Kubernetes applies the deployment and service manifests to the selected namespace.
 10. The workflow checks rollout status and retrieves service information.
 
 ## Containerisation
@@ -76,14 +76,6 @@ The service manifest defines:
 - **Target port:** 80
 
 The LoadBalancer configuration provides an external access point through the cloud load balancer.
-
-## Release Branch Validation
-
-A separate GitHub Actions workflow validates pull requests targeting `master`.
-
-It allows pull requests from the `release` branch and fails the check for pull requests originating from other branches.
-
-For this check to prevent merging, its status must also be configured as a required check in GitHub branch protection rules or a ruleset.
 
 ## GitHub Repository Templates
 
@@ -125,12 +117,16 @@ This project provided practical experience with:
 - Configuring development and production namespaces.
 - Using Azure CLI and kubectl in CI/CD workflows.
 - Managing pipeline credentials with GitHub Secrets.
-- Implementing release branch validation.
+- Organising repository issue and pull request templates.
 
 ## Project Status
 
-This is a completed project. The AKS environment used during implementation has since been decommissioned. The repository retains the application files, Dockerfile, Kubernetes manifests, and GitHub Actions workflows as a record of the implementation.
+This project has been completed. The AKS environment used during implementation has since been decommissioned.
+
+The repository retains the application files, Dockerfile, Kubernetes manifests, and GitHub Actions workflow as a record of the implementation.
+
+The deployment workflow describes the original deployment process but is not currently running against an active AKS environment.
 
 ## Project Repository
 
-[View the Netflix Clone project on GitHub](https://github.com/temade91/Netflix--clone-project-)
+[View Azure Cloud Deployment Automation with AKS](https://github.com/temade91/Azure-Cloud-Deployment-Automation-with-AKS)
